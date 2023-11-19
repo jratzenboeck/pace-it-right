@@ -5,14 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx @11ty/eleventy --serve",
-    "dev:tailwind": "npx tailwindcss -i ./index.css -o ./_site/index.css --watch"
+    "start": "npm-run-all -p dev:*",
+    "dev:11ty": "npx @11ty/eleventy --serve",
+    "dev:css": "npx tailwindcss -i ./index.css -o ./_site/index.css --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
+    "npm-run-all": "^4.1.5",
     "tailwindcss": "^3.3.5"
   }
 }

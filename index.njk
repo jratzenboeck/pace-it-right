@@ -7,16 +7,17 @@
 </head>
 
 <body>
-    <h1 class="text-2xl">pace-it-right</h1>
+    <h1 class="text-2xl text-center">pace-it-right</h1>
 
-    <main>
-        <section>
-            <button type="button">Swim</button>
-            <button type="button">Bike</button>
-            <button type="button">Run</button>
+    <main class="px-2 max-w-3xl my-4 mx-auto">
+        <section class="flex">
+            <button type="button" class="border p-2 mr-2 flex-1">Swim</button>
+            <button type="button" class="border p-2 mr-2 flex-1">Bike</button>
+            <button type="button" class="border p-2 flex-1">Run</button>
         </section>
 
-        <section>
+        <section class="my-2">
+            <h2 class="text-xl">Eingabe</h2>
             <div>
                 <input type="radio" id="swim-pace" name="swim-input-choice" value="swim-pace" />
                 <label for="swim-pace">Pace (min/100m)</label>
@@ -25,19 +26,20 @@
                 <label for="swim-distance-time">Distanz / Zeit</label>
             </div>
 
-            <div>
-                <input type="number" step="1" min="0" max="5" />
+            <div class="my-2">
+                <input type="number" step="1" min="0" max="5" class="border w-12" />
                 <span>:</span>
-                <input type="number" step="1" min="0" max="59" />
+                <input type="number" step="1" min="0" max="59" class="border w-12" />
             </div>
+
         </section>
 
-        <section>
-            <div>
+        <section class="my-2">
+            <div class="flex justify-between my-4">
                 <span>Gängige Distanzen</span>
                 <div>Caret</div>
             </div>
-            <div>
+            <div class="grid grid-cols-2">
                 <div>25m</div>
                 <div>01:00</div>
                 <div>50m</div>
@@ -53,13 +55,14 @@
                 <div>1500m</div>
                 <div>01:00</div>
                 <div>5000m</div>
-            </ul>
+                <div>01:00</div>
+            </div>
 
-            <div>
+            <div class="my-4 flex justify-between">
                 <span>Triathlon</span>
                 <div>Caret</div>
-            </div>            
-            <div>
+            </div>
+            <div class="grid grid-cols-2">
                 <div>750m (Sprintdistanz)</div>
                 <div>01:00</div>
                 <div>1.5km (Olympische Distanz)</div>
@@ -70,17 +73,17 @@
                 <div>01:00</div>
             </div>
 
-            <div>
+            <div class="my-4 flex justify-between">
                 <span>Benutzerdefiniert</span>
                 <div>Caret</div>
             </div>
-            <div>
+            <div class="grid grid-cols-2">
                 <div>
                     <label for="swim-distance-input">Distanz in Meter</label>
                     <input type="number" min="1" max="20000">
                 </div>
                 <p>Ergebnis</p>
-                
+
                 <div>
                     <div>1000m</div>
                     <div>15:00</div>
