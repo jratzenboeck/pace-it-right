@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>pace-it-right</title>
+    <link rel="stylesheet" href="{{ 'index.css' | url }}" />
+</head>
+
+<body>
+    <h1 class="text-2xl">pace-it-right</h1>
+
+    <main>
+        <section>
+            <button type="button">Swim</button>
+            <button type="button">Bike</button>
+            <button type="button">Run</button>
+        </section>
+
+        <section>
+            <div>
+                <input type="radio" id="swim-pace" name="swim-input-choice" value="swim-pace" />
+                <label for="swim-pace">Pace (min/100m)</label>
+
+                <input type="radio" id="swim-distance-time" name="swim-input-choice" value="swim-distance-time" />
+                <label for="swim-distance-time">Distanz / Zeit</label>
+            </div>
+
+            <div>
+                <input type="number" step="1" min="0" max="5" />
+                <span>:</span>
+                <input type="number" step="1" min="0" max="59" />
+            </div>
+        </section>
+
+        <section>
+            <div>
+                <span>Gängige Distanzen</span>
+                <div>Caret</div>
+            </div>
+            <div>
+                <div>25m</div>
+                <div>01:00</div>
+                <div>50m</div>
+                <div>01:00</div>
+                <div>100m</div>
+                <div>01:00</div>
+                <div>200m</div>
+                <div>01:00</div>
+                <div>400m</div>
+                <div>01:00</div>
+                <div>800m</div>
+                <div>01:00</div>
+                <div>1500m</div>
+                <div>01:00</div>
+                <div>5000m</div>
+            </ul>
+
+            <div>
+                <span>Triathlon</span>
+                <div>Caret</div>
+            </div>            
+            <div>
+                <div>750m (Sprintdistanz)</div>
+                <div>01:00</div>
+                <div>1.5km (Olympische Distanz)</div>
+                <div>01:00</div>
+                <div>1.9km (Mitteldistanz)</div>
+                <div>01:00</div>
+                <div>3.8km (Langdistanz)</div>
+                <div>01:00</div>
+            </div>
+
+            <div>
+                <span>Benutzerdefiniert</span>
+                <div>Caret</div>
+            </div>
+            <div>
+                <div>
+                    <label for="swim-distance-input">Distanz in Meter</label>
+                    <input type="number" min="1" max="20000">
+                </div>
+                <p>Ergebnis</p>
+                
+                <div>
+                    <div>1000m</div>
+                    <div>15:00</div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
