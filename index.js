@@ -2,25 +2,27 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('swim', () => ({
         swimTimesCommonDistances: [],
+        swimTimesTriathlon: [],
         swimPaceMinutes: 0,
         swimPaceSeconds: 0,
-    
+        customSwimDistanceInMeters: 0,
+        customSwimTime: 0,
+
         init() {
-            this.swimTimesCommonDistances = this.prepareSwimTimes()
+            this.prepareSwimTimesForCommonDistances()
+            this.prepareSwimTimesForTriathlon()
         },
-    
-        prepareSwimTimes() {
-            const swimTimes = []
-        
+
+        prepareSwimTimesForCommonDistances() {
             for (let distance = 25; distance <= 800; distance *= 2) {
-                swimTimes.push({
+                this.swimTimesCommonDistances.push({
                     distance,
                     distanceUnit: 'm',
                     time: 0
                 })
             }
-        
-            swimTimes.push(
+
+            this.swimTimesCommonDistances.push(
                 {
                     distance: 1500,
                     distanceUnit: 'm',
@@ -32,26 +34,60 @@ document.addEventListener('alpine:init', () => {
                     time: 0
                 }
             )
-        
-            return swimTimes
         },
-    
+
+        prepareSwimTimesForTriathlon() {
+            this.swimTimesTriathlon.push({
+                distance: 750,
+                distanceUnit: 'm',
+                distanceLabel: '(Sprintdistanz)',
+                time: 0
+            },
+                {
+                    distance: 1.5,
+                    distanceUnit: 'km',
+                    distanceLabel: '(Olympische Distanz)',
+                    time: 0
+                },
+                {
+                    distance: 1.9,
+                    distanceUnit: 'km',
+                    distanceLabel: '(Mitteldistanz)',
+                    time: 0
+                },
+                {
+                    distance: 3.8,
+                    distanceUnit: 'km',
+                    distanceLabel: '(Langdistanz)',
+                    time: 0
+                })
+        },
+
         calculateSwimTimesByPace() {
             const minutesInput = parseInt(this.swimPaceMinutes)
             const secondsInput = parseInt(this.swimPaceSeconds)
             const seconds = minutesInput * 60 + secondsInput
-        
-            this.swimTimesCommonDistances.forEach(swimTime => {
-                const resultInSeconds = seconds / 100 * distanceInMeters(swimTime.distance, swimTime.distanceUnit)
 
-                const swimTimeHours = Math.floor(resultInSeconds / 3600)
-                const swimTimeMinutes = Math.floor(resultInSeconds % 3600 / 60)
-                const swimTimeSeconds = Math.floor(resultInSeconds % 3600 % 60)
-                swimTime.time = formatTime(swimTimeHours, swimTimeMinutes, swimTimeSeconds)
+            this.swimTimesCommonDistances.forEach(swimTime => {
+                swimTime.time = calculateSwimTime(seconds, swimTime.distance, swimTime.distanceUnit)
             });
+            this.swimTimesTriathlon.forEach(swimTime => {
+                swimTime.time = calculateSwimTime(seconds, swimTime.distance, swimTime.distanceUnit)
+            });
+            this.customSwimTime = calculateSwimTime(seconds, this.customSwimDistanceInMeters, 'm')
         },
     }))
 })
+
+function calculateSwimTime(secondsInput, distance, distanceUnit) {
+    const resultInSeconds = secondsInput / 100 * distanceInMeters(distance, distanceUnit)
+
+    const swimTimeHours = Math.floor(resultInSeconds / 3600)
+    const swimTimeMinutes = Math.floor(resultInSeconds % 3600 / 60)
+    const swimTimeSeconds = Math.floor(resultInSeconds % 3600 % 60)
+
+    return formatTime(swimTimeHours, swimTimeMinutes, swimTimeSeconds)
+}
 
 function distanceInMeters(distance, distanceUnit) {
     return distanceUnit == 'km' ? distance * 1000 : distance

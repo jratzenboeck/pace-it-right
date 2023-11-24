@@ -73,31 +73,32 @@
                         <span>Triathlon</span>
                         <div>Caret</div>
                     </div>
-                    <div class="grid grid-cols-2">
-                        <div>750m (Sprintdistanz)</div>
-                        <div>01:00</div>
-                        <div>1.5km (Olympische Distanz)</div>
-                        <div>01:00</div>
-                        <div>1.9km (Mitteldistanz)</div>
-                        <div>01:00</div>
-                        <div>3.8km (Langdistanz)</div>
-                        <div>01:00</div>
-                    </div>
+                    <template x-for="(swimTime, index) in swimTimesTriathlon" :key="index">
+                        <div class="flex justify-between">
+                            <div>
+                                <span x-text="swimTime.distance"></span>
+                                <span x-text="swimTime.distanceUnit"></span>
+                            </div>
+                            <span x-text="swimTime.time"></span>
+                        </div>
+                    </template>
 
                     <div class="my-4 flex justify-between">
                         <span>Benutzerdefiniert</span>
                         <div>Caret</div>
                     </div>
-                    <div class="grid grid-cols-2">
+                    <div>
                         <div>
                             <label for="swim-distance-input">Distanz in Meter</label>
-                            <input type="number" min="1" max="20000">
+                            <input type="number" min="1" max="20000" x-model="customSwimDistanceInMeters" @blur="calculateSwimTimesByPace">
                         </div>
                         <p>Ergebnis</p>
 
-                        <div>
-                            <div>1000m</div>
-                            <div>15:00</div>
+                        <div class="flex justify-between">
+                            <div>
+                                <span x-text="customSwimDistanceInMeters"></span>m
+                            </div>
+                            <span x-text="customSwimTime"></span>
                         </div>
                     </div>
                 </section>
