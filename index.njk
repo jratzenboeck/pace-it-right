@@ -1,96 +1,108 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title>pace-it-right</title>
-    <link rel="stylesheet" href="{{ 'index.css' | url }}" />
-</head>
+    <head>
+        <title>pace-it-right</title>
+        <link rel="stylesheet" href="{{ 'index.css' | url }}"/>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="/index.js"></script>
+    </head>
 
-<body>
-    <h1 class="text-2xl text-center">pace-it-right</h1>
+    <body>
+        <h1 class="text-2xl text-center">pace-it-right</h1>
 
-    <main class="px-2 max-w-3xl my-4 mx-auto">
-        <section class="flex">
-            <button type="button" class="border p-2 mr-2 flex-1">Swim</button>
-            <button type="button" class="border p-2 mr-2 flex-1">Bike</button>
-            <button type="button" class="border p-2 flex-1">Run</button>
-        </section>
+        <main class="px-2 max-w-3xl my-4 mx-auto">
+            <section class="flex">
+                <button type="button" class="border p-2 mr-2 flex-1">Swim</button>
+                <button type="button" class="border p-2 mr-2 flex-1">Bike</button>
+                <button type="button" class="border p-2 flex-1">Run</button>
+            </section>
 
-        <section class="my-2">
-            <h2 class="text-xl">Eingabe</h2>
-            <div>
-                <input type="radio" id="swim-pace" name="swim-input-choice" value="swim-pace" />
-                <label for="swim-pace">Pace (min/100m)</label>
+            <div x-data="swim">
+                <section class="my-2" x-data="{ pace: true }">
+                    <h2 class="text-xl">Eingabe</h2>
+                    <div>
+                        <input type="radio" id="swim-pace" name="swim-input-choice" value="swim-pace" @click="pace = true"
+                    checked/>
+                        <label for="swim-pace">Pace (min/100m)</label>
 
-                <input type="radio" id="swim-distance-time" name="swim-input-choice" value="swim-distance-time" />
-                <label for="swim-distance-time">Distanz / Zeit</label>
+                        <input type="radio" id="swim-distance-time" name="swim-input-choice" value="swim-distance-time"
+                    @click="pace = false"/>
+                        <label for="swim-distance-time">Distanz / Zeit</label>
+                    </div>
+
+                    <div class="my-2" x-show="pace">
+                        <input type="number" id="swim-input-pace-minutes" step="1" min="0" max="5" class="border w-12" x-model="swimPaceMinutes"
+                    @blur="calculateSwimTimesByPace"/>
+                        <span>:</span>
+                        <input type="number" id="swim-input-pace-seconds" step="1" min="0" max="59" class="border w-12" x-model="swimPaceSeconds"
+                    @blur="calculateSwimTimesByPace"/>
+                    </div>
+
+                    <div class="my-2" x-show="!pace">
+                        <div>
+                            <label for="swim-distance-input">Distanz in Meter</label>
+                            <input type="number" id="swim-distance-input" step="1" min="1" max="20000" class="border w-12"/>
+                        </div>
+                        <div class="my-2">
+                            <label>Zeit in Minuten und Sekunden</label>
+                            <input type="number" step="1" min="0" max="500" class="border w-12"/>
+                            <span>:</span>
+                            <input type="number" step="1" min="0" max="59" class="border w-12"/>
+                        </div>
+                    </div>
+
+                </section>
+
+                <section class="my-2">
+                    <div class="flex justify-between my-4">
+                        <span>Gängige Distanzen</span>
+                        <div>Caret</div>
+                    </div>
+                    <template x-for="(swimTime, index) in swimTimesCommonDistances" :key="index">
+                        <div class="flex justify-between">
+                            <div>
+                                <span x-text="swimTime.distance"></span>
+                                <span x-text="swimTime.distanceUnit"></span>
+                            </div>
+                            <span x-text="swimTime.time"></span>
+                        </div>
+                    </template>
+
+                    <div class="my-4 flex justify-between">
+                        <span>Triathlon</span>
+                        <div>Caret</div>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <div>750m (Sprintdistanz)</div>
+                        <div>01:00</div>
+                        <div>1.5km (Olympische Distanz)</div>
+                        <div>01:00</div>
+                        <div>1.9km (Mitteldistanz)</div>
+                        <div>01:00</div>
+                        <div>3.8km (Langdistanz)</div>
+                        <div>01:00</div>
+                    </div>
+
+                    <div class="my-4 flex justify-between">
+                        <span>Benutzerdefiniert</span>
+                        <div>Caret</div>
+                    </div>
+                    <div class="grid grid-cols-2">
+                        <div>
+                            <label for="swim-distance-input">Distanz in Meter</label>
+                            <input type="number" min="1" max="20000">
+                        </div>
+                        <p>Ergebnis</p>
+
+                        <div>
+                            <div>1000m</div>
+                            <div>15:00</div>
+                        </div>
+                    </div>
+                </section>
             </div>
-
-            <div class="my-2">
-                <input type="number" step="1" min="0" max="5" class="border w-12" />
-                <span>:</span>
-                <input type="number" step="1" min="0" max="59" class="border w-12" />
-            </div>
-
-        </section>
-
-        <section class="my-2">
-            <div class="flex justify-between my-4">
-                <span>Gängige Distanzen</span>
-                <div>Caret</div>
-            </div>
-            <div class="grid grid-cols-2">
-                <div>25m</div>
-                <div>01:00</div>
-                <div>50m</div>
-                <div>01:00</div>
-                <div>100m</div>
-                <div>01:00</div>
-                <div>200m</div>
-                <div>01:00</div>
-                <div>400m</div>
-                <div>01:00</div>
-                <div>800m</div>
-                <div>01:00</div>
-                <div>1500m</div>
-                <div>01:00</div>
-                <div>5000m</div>
-                <div>01:00</div>
-            </div>
-
-            <div class="my-4 flex justify-between">
-                <span>Triathlon</span>
-                <div>Caret</div>
-            </div>
-            <div class="grid grid-cols-2">
-                <div>750m (Sprintdistanz)</div>
-                <div>01:00</div>
-                <div>1.5km (Olympische Distanz)</div>
-                <div>01:00</div>
-                <div>1.9km (Mitteldistanz)</div>
-                <div>01:00</div>
-                <div>3.8km (Langdistanz)</div>
-                <div>01:00</div>
-            </div>
-
-            <div class="my-4 flex justify-between">
-                <span>Benutzerdefiniert</span>
-                <div>Caret</div>
-            </div>
-            <div class="grid grid-cols-2">
-                <div>
-                    <label for="swim-distance-input">Distanz in Meter</label>
-                    <input type="number" min="1" max="20000">
-                </div>
-                <p>Ergebnis</p>
-
-                <div>
-                    <div>1000m</div>
-                    <div>15:00</div>
-                </div>
-            </div>
-        </section>
-    </main>
-</body>
+        </main>
+    </body>
 
 </html>
