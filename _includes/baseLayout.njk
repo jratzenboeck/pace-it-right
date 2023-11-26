@@ -11,19 +11,7 @@
     <body>
         <h1 class="text-2xl text-center">pace-it-right</h1>
 
-        <nav class="px-2 max-w-3xl my-4 mx-auto">
-            <ul class="flex">
-                <li class="border p-2 mr-2 flex-1 text-center hover:bg-gray-600 hover:text-white">
-                    <button type="button">Swim</button>
-                </li>
-                <li  class="border p-2 mr-2 flex-1 text-center hover:bg-gray-600 hover:text-white">
-                    <button type="button">Bike</button>
-                </li>
-                <li class="border p-2 flex-1 text-center hover:bg-gray-600 hover:text-white">
-                    <button type="button">Run</button>
-                </li>
-            </ul>
-        </nav>
+        {% include 'nav.njk' %}
 
         <main class="px-2 max-w-3xl my-4 mx-auto">
             {{ content | safe }}
