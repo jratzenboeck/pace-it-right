@@ -31,10 +31,10 @@ layout: baseLayout.njk
                 <input type="number" id="swim-distance-input" step="1" min="1" max="20000" class="border w-12 p-1"/>
             </div>
             <div class="my-2">
-                <label>Zeit in Minuten und Sekunden</label>
-                <input type="number" step="1" min="0" max="500" class="border w-12 p-1"/>
+                <label for="swim-time-input-minutes">Zeit in Minuten und Sekunden</label>
+                <input type="number" id="swim-time-input-minutes" step="1" min="0" max="500" class="border w-12 p-1"/>
                 <span>:</span>
-                <input type="number" step="1" min="0" max="59" class="border w-12 p-1"/>
+                <input type="number" id="swim-time-input-seconds" step="1" min="0" max="59" class="border w-12 p-1"/>
             </div>
         </div>
 
@@ -104,8 +104,8 @@ layout: baseLayout.njk
 
             <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
                 <div>
-                    <label for="swim-distance-input mr-2">Distanz in Meter</label>
-                    <input type="number" min="1" max="20000" x-model="customSwimDistanceInMeters" @blur="calculateSwimTimesByPace" class="border w-16 p-1">
+                    <label for="swim-custom-distance-input" class="mr-2">Distanz in Meter</label>
+                    <input type="number" id="swim-custom-distance-input" min="1" max="20000" x-model="customSwimDistanceInMeters" @blur="calculateSwimTimesByPace" class="border w-16 p-1">
                 </div>
 
                 <div class="flex justify-between">
