@@ -1,143 +1,122 @@
-<!DOCTYPE html>
-<html>
+---
+layout: baseLayout.njk
+---
+<div x-data="swim" class="my-4">
 
-    <head>
-        <title>pace-it-right</title>
-        <link rel="stylesheet" href="{{ 'index.css' | url }}"/>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <script src="/index.js"></script>
-    </head>
+    <section x-data="{ pace: true }">
+        <h2 class="text-xl">Eingabe</h2>
 
-    <body>
-        <h1 class="text-2xl text-center">pace-it-right</h1>
-
-        <main class="px-2 max-w-3xl my-4 mx-auto">
-            <section class="flex">
-                <button type="button" class="border p-2 mr-2 flex-1 hover:bg-gray-600 hover:text-white">Swim</button>
-                <button type="button" class="border p-2 mr-2 flex-1 hover:bg-gray-600 hover:text-white">Bike</button>
-                <button type="button" class="border p-2 flex-1 hover:bg-gray-600 hover:text-white">Run</button>
-            </section>
-
-            <div x-data="swim" class="my-4">
-
-                <section x-data="{ pace: true }">
-                    <h2 class="text-xl">Eingabe</h2>
-
-                    <div class="my-2">
-                        <input type="radio" id="swim-pace" name="swim-input-choice" value="swim-pace" @click="pace = true"
+        <div class="my-2">
+            <input type="radio" id="swim-pace" name="swim-input-choice" value="swim-pace" @click="pace = true"
                     checked/>
-                        <label for="swim-pace">Pace (min/100m)</label>
+            <label for="swim-pace">Pace (min/100m)</label>
 
-                        <input type="radio" id="swim-distance-time" name="swim-input-choice" value="swim-distance-time"
+            <input type="radio" id="swim-distance-time" name="swim-input-choice" value="swim-distance-time"
                     @click="pace = false" class="ml-2"/>
-                        <label for="swim-distance-time">Distanz / Zeit</label>
-                    </div>
+            <label for="swim-distance-time">Distanz / Zeit</label>
+        </div>
 
-                    <div class="my-2" x-show="pace">
-                        <input type="number" id="swim-input-pace-minutes" step="1" min="0" max="5" class="border w-12" x-model="swimPaceMinutes"
+        <div class="my-2" x-show="pace">
+            <input type="number" id="swim-input-pace-minutes" step="1" min="0" max="5" class="border w-12" x-model="swimPaceMinutes"
                     @blur="calculateSwimTimesByPace"/>
-                        <span>min</span>
-                        <input type="number" id="swim-input-pace-seconds" step="1" min="0" max="59" class="border w-12 ml-4" x-model="swimPaceSeconds"
+            <span>min</span>
+            <input type="number" id="swim-input-pace-seconds" step="1" min="0" max="59" class="border w-12 ml-4" x-model="swimPaceSeconds"
                     @blur="calculateSwimTimesByPace"/>
-                        <span>sec</span>
-                    </div>
+            <span>sec</span>
+        </div>
 
-                    <div class="my-2" x-show="!pace">
-                        <div>
-                            <label for="swim-distance-input">Distanz in Meter</label>
-                            <input type="number" id="swim-distance-input" step="1" min="1" max="20000" class="border w-12 p-1"/>
-                        </div>
-                        <div class="my-2">
-                            <label>Zeit in Minuten und Sekunden</label>
-                            <input type="number" step="1" min="0" max="500" class="border w-12 p-1"/>
-                            <span>:</span>
-                            <input type="number" step="1" min="0" max="59" class="border w-12 p-1"/>
-                        </div>
-                    </div>
-
-                </section>
-
-                <section class="my-4">
-
-                    <div x-data="{ sectionVisible: true }" class="my-2">
-                        <div class="flex justify-between items-center border p-2 hover:cursor-pointer" @click="sectionVisible = !sectionVisible">
-                            <span>Gängige Distanzen</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4" x-show="!sectionVisible" x-transition.opacity.duration.500ms>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4" x-show="sectionVisible" x-transition.opacity.duration.500ms>>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/>
-                            </svg>
-
-                        </div>
-
-                        <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
-                            <template x-for="(swimTime, index) in swimTimesCommonDistances" :key="index">
-                                <div class="flex justify-between">
-                                    <div>
-                                        <span x-text="swimTime.distance"></span>
-                                        <span x-text="swimTime.distanceUnit"></span>
-                                    </div>
-                                    <span x-text="swimTime.time"></span>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-
-                    <div x-data="{ sectionVisible: false }" class="my-4">
-                        <div class="flex justify-between items-center border p-2 hover:cursor-pointer" @click="sectionVisible = !sectionVisible">
-                            <span>Triathlon</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4" x-show="!sectionVisible" x-transition.opacity.duration.500ms>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4" x-show="sectionVisible" x-transition.opacity.duration.500ms>>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/>
-                            </svg>
-                        </div>
-
-                        <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
-                            <template x-for="(swimTime, index) in swimTimesTriathlon" :key="index">
-                                <div class="flex justify-between">
-                                    <div>
-                                        <span x-text="swimTime.distance"></span>
-                                        <span x-text="swimTime.distanceUnit"></span>
-                                    </div>
-                                    <span x-text="swimTime.time"></span>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-
-                    <div x-data="{ sectionVisible: false }" class="my-4">
-                        <div class="flex justify-between items-center border p-2 hover:cursor-pointer" @click="sectionVisible = !sectionVisible">
-                            <span>Benutzerdefiniert</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4" x-show="!sectionVisible" x-transition.opacity.duration.500ms>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4" x-show="sectionVisible" x-transition.opacity.duration.500ms>>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/>
-                            </svg>
-                        </div>
-
-                        <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
-                            <div>
-                                <label for="swim-distance-input mr-2">Distanz in Meter</label>
-                                <input type="number" min="1" max="20000" x-model="customSwimDistanceInMeters" @blur="calculateSwimTimesByPace" class="border w-16 p-1">
-                            </div>
-
-                            <div class="flex justify-between">
-                                <div>
-                                    <span x-text="customSwimDistanceInMeters"></span>
-                                    <span>m</span>
-                                </div>
-                                <span x-text="customSwimTime"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                </section>
+        <div class="my-2" x-show="!pace">
+            <div>
+                <label for="swim-distance-input">Distanz in Meter</label>
+                <input type="number" id="swim-distance-input" step="1" min="1" max="20000" class="border w-12 p-1"/>
             </div>
-        </main>
-    </body>
+            <div class="my-2">
+                <label>Zeit in Minuten und Sekunden</label>
+                <input type="number" step="1" min="0" max="500" class="border w-12 p-1"/>
+                <span>:</span>
+                <input type="number" step="1" min="0" max="59" class="border w-12 p-1"/>
+            </div>
+        </div>
 
-</html>
+    </section>
+
+    <section class="my-4">
+
+        <div x-data="{ sectionVisible: true }" class="my-2">
+            <div class="flex justify-between items-center border p-2 hover:cursor-pointer" @click="sectionVisible = !sectionVisible">
+                <span>Gängige Distanzen</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4" x-show="!sectionVisible" x-transition.opacity.duration.500ms>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4" x-show="sectionVisible" x-transition.opacity.duration.500ms>>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/>
+                </svg>
+
+            </div>
+
+            <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
+                <template x-for="(swimTime, index) in swimTimesCommonDistances" :key="index">
+                    <div class="flex justify-between">
+                        <div>
+                            <span x-text="swimTime.distance"></span>
+                            <span x-text="swimTime.distanceUnit"></span>
+                        </div>
+                        <span x-text="swimTime.time"></span>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div x-data="{ sectionVisible: false }" class="my-4">
+            <div class="flex justify-between items-center border p-2 hover:cursor-pointer" @click="sectionVisible = !sectionVisible">
+                <span>Triathlon</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4" x-show="!sectionVisible" x-transition.opacity.duration.500ms>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4" x-show="sectionVisible" x-transition.opacity.duration.500ms>>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/>
+                </svg>
+            </div>
+
+            <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
+                <template x-for="(swimTime, index) in swimTimesTriathlon" :key="index">
+                    <div class="flex justify-between">
+                        <div>
+                            <span x-text="swimTime.distance"></span>
+                            <span x-text="swimTime.distanceUnit"></span>
+                        </div>
+                        <span x-text="swimTime.time"></span>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div x-data="{ sectionVisible: false }" class="my-4">
+            <div class="flex justify-between items-center border p-2 hover:cursor-pointer" @click="sectionVisible = !sectionVisible">
+                <span>Benutzerdefiniert</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4" x-show="!sectionVisible" x-transition.opacity.duration.500ms>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4" x-show="sectionVisible" x-transition.opacity.duration.500ms>>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/>
+                </svg>
+            </div>
+
+            <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
+                <div>
+                    <label for="swim-distance-input mr-2">Distanz in Meter</label>
+                    <input type="number" min="1" max="20000" x-model="customSwimDistanceInMeters" @blur="calculateSwimTimesByPace" class="border w-16 p-1">
+                </div>
+
+                <div class="flex justify-between">
+                    <div>
+                        <span x-text="customSwimDistanceInMeters"></span>
+                        <span>m</span>
+                    </div>
+                    <span x-text="customSwimTime"></span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</div>

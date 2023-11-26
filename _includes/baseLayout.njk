@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>pace-it-right</title>
+        <link rel="stylesheet" href="{{ 'index.css' | url }}"/>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="/index.js"></script>
+    </head>
+
+    <body>
+        <h1 class="text-2xl text-center">pace-it-right</h1>
+
+        <nav class="px-2 max-w-3xl my-4 mx-auto">
+            <ul class="flex">
+                <li class="border p-2 mr-2 flex-1 text-center hover:bg-gray-600 hover:text-white">
+                    <button type="button">Swim</button>
+                </li>
+                <li  class="border p-2 mr-2 flex-1 text-center hover:bg-gray-600 hover:text-white">
+                    <button type="button">Bike</button>
+                </li>
+                <li class="border p-2 flex-1 text-center hover:bg-gray-600 hover:text-white">
+                    <button type="button">Run</button>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="px-2 max-w-3xl my-4 mx-auto">
+            {{ content | safe }}
+        </main>
+    </body>
+</html>
