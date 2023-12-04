@@ -7,6 +7,9 @@ document.addEventListener('alpine:init', () => {
         swimPaceSeconds: 0,
         customSwimDistanceInMeters: 0,
         customSwimTime: 0,
+        swimDistanceInputInMeters: 0,
+        swimTimeInputInMinutes: 0,
+        swimTimeInputInSeconds: 0,
 
         init() {
             this.prepareSwimTimesForCommonDistances()
@@ -76,6 +79,21 @@ document.addEventListener('alpine:init', () => {
             });
             this.customSwimTime = calculateSwimTime(seconds, this.customSwimDistanceInMeters, 'm')
         },
+
+        calculateSwimTimesByDistanceAndTime() {
+            const minutesInput = parseInt(this.swimTimeInputInMinutes)
+            const secondsInput = parseInt(this.swimTimeInputInSeconds)
+            const seconds = minutesInput * 60 + secondsInput
+            const pacePer100InSeconds = (100 / parseInt(this.swimDistanceInputInMeters)) * seconds
+
+            this.swimTimesCommonDistances.forEach(swimTime => {
+                swimTime.time = calculateSwimTime(pacePer100InSeconds, swimTime.distance, swimTime.distanceUnit)
+            });
+            this.swimTimesTriathlon.forEach(swimTime => {
+                swimTime.time = calculateSwimTime(pacePer100InSeconds, swimTime.distance, swimTime.distanceUnit)
+            });
+            this.customSwimTime = calculateSwimTime(pacePer100InSeconds, this.customSwimDistanceInMeters, 'm')
+        }
     }))
 })
 

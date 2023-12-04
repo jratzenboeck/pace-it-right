@@ -28,13 +28,13 @@ layout: baseLayout.njk
         <div class="my-2" x-show="!pace">
             <div>
                 <label for="swim-distance-input">Distanz in Meter</label>
-                <input type="number" id="swim-distance-input" step="1" min="1" max="20000" class="border w-12 p-1"/>
+                <input type="number" id="swim-distance-input" step="1" min="1" max="20000" class="border w-18 p-1" x-model="swimDistanceInputInMeters" @blur="calculateSwimTimesByDistanceAndTime"/>
             </div>
             <div class="my-2">
                 <label for="swim-time-input-minutes">Zeit in Minuten und Sekunden</label>
-                <input type="number" id="swim-time-input-minutes" step="1" min="0" max="500" class="border w-12 p-1"/>
+                <input type="number" id="swim-time-input-minutes" step="1" min="0" max="500" class="border w-12 p-1" x-model="swimTimeInputInMinutes" @blur="calculateSwimTimesByDistanceAndTime"/>
                 <span>:</span>
-                <input type="number" id="swim-time-input-seconds" step="1" min="0" max="59" class="border w-12 p-1"/>
+                <input type="number" id="swim-time-input-seconds" step="1" min="0" max="59" class="border w-12 p-1" x-model="swimTimeInputInSeconds" @blur="calculateSwimTimesByDistanceAndTime"/>
             </div>
         </div>
 
