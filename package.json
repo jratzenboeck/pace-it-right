@@ -8,7 +8,7 @@
     "start": "npm-run-all -p dev:*",
     "dev:11ty": "npx @11ty/eleventy --serve",
     "dev:css": "npx tailwindcss -i ./index.css -o ./_site/index.css --watch",
-    "build": "npx tailwindcss -i ./index.css -o ./_site/index.css --minify && npx @11ty/eleventy"
+    "build": "npx @11ty/eleventy && npx tailwindcss -i ./index.css -o ./_site/index.css --minify"
   },
   "keywords": [],
   "author": "",
