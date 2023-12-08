@@ -91,6 +91,71 @@ document.addEventListener('alpine:init', () => {
         }
     })),
 
+    Alpine.data('bike', () => ({
+        bikeTriathlonDistances: [],
+        bikePaceKmPerHour: 0,
+        bikeTimeInputInHours: 0,
+        bikeTimeInputInMinutes: 0,
+        bikeTimeInputInSeconds: 0,
+        bikeDistanceInputInKm: 0,
+        customBikeDistanceInKm: 0,
+        customBikeTime: 0,
+
+        init() {
+            this.prepareBikeTimesForTriathlon()
+        },
+
+        prepareBikeTimesForTriathlon() {
+            this.bikeTriathlonDistances.push(
+            {
+                distance: 20,
+                distanceUnit: 'km',
+                distanceLabel: '(Sprintdistanz)',
+                time: 0
+            },
+            {
+                distance: 40,
+                distanceUnit: 'km',
+                distanceLabel: '(Olympische Distanz)',
+                time: 0
+            },
+            {
+                distance: 90,
+                distanceUnit: 'km',
+                distanceLabel: '(Mitteldistanz)',
+                time: 0
+            },
+            {
+                distance: 180,
+                distanceUnit: 'km',
+                distanceLabel: '(Langdistanz)',
+                time: 0
+            })
+        },
+
+        calculateBikeTimesByPace() {
+            const pace = parseFloat(this.bikePaceKmPerHour)
+
+            this.bikeTriathlonDistances.forEach(bikeDistance => {
+                bikeDistance.time = calculateTimeSegmentsFromSeconds((bikeDistance.distance / pace) * 3600)
+            });
+            this.customBikeTime = calculateTimeSegmentsFromSeconds((parseFloat(this.customBikeDistanceInKm) / pace) * 3600)
+        },
+
+        calculateBikeTimesByDistanceAndTime() {
+            const hoursInput = parseInt(this.bikeTimeInputInHours)
+            const minutesInput = parseInt(this.bikeTimeInputInMinutes)
+            const secondsInput = parseInt(this.bikeTimeInputInSeconds)
+            const seconds = hoursInput * 3600 + minutesInput * 60 + secondsInput
+
+            const bikeDistanceInputInKmParsed = parseFloat(this.bikeDistanceInputInKm)
+            this.bikeTriathlonDistances.forEach(bikeDistance => {
+                bikeDistance.time = calculateTimeSegmentsFromSeconds((bikeDistance.distance / bikeDistanceInputInKmParsed) * seconds)
+            });
+            this.customBikeTime = calculateTimeSegmentsFromSeconds((parseFloat(this.customBikeDistanceInKm) / bikeDistanceInputInKmParsed) * seconds)
+        }
+    })),
+
     Alpine.data('run', () => ({
         runTimesShortTrack: [],
         runTimesMiddleTrack: [],
@@ -199,12 +264,11 @@ document.addEventListener('alpine:init', () => {
             this.runTimesMiddleTrack.forEach(runTime => {
                 runTime.time = calculateTime(pacePerKmInSeconds, runTime.distance, runTime.distanceUnit, ratio)
             });
+            this.runTimesLongTrack.forEach(runTime => {
+                runTime.time = calculateTime(pacePerKmInSeconds, runTime.distance, runTime.distanceUnit, ratio)
+            });
             this.customRunTime = calculateTime(pacePerKmInSeconds, this.customRunDistanceInMeters, 'm', ratio)
         }
-    }))
-
-    Alpine.data('bike', () => ({
-
     }))
 })
 
@@ -225,11 +289,15 @@ function prepareDistances(start, end, factor = 2, meters = 'm') {
 function calculateTime(secondsInput, distance, distanceUnit, paceRatio) {
     const resultInSeconds = secondsInput / paceRatio * distanceInMeters(distance, distanceUnit)
 
-    const swimTimeHours = Math.floor(resultInSeconds / 3600)
-    const swimTimeMinutes = Math.floor(resultInSeconds % 3600 / 60)
-    const swimTimeSeconds = Math.floor(resultInSeconds % 3600 % 60)
+    return calculateTimeSegmentsFromSeconds(resultInSeconds)
+}
 
-    return formatTime(swimTimeHours, swimTimeMinutes, swimTimeSeconds)
+function calculateTimeSegmentsFromSeconds(seconds) {
+    const timeHours = Math.floor(seconds / 3600)
+    const timeMinutes = Math.floor(seconds % 3600 / 60)
+    const timeSeconds = Math.floor(seconds % 3600 % 60)
+
+    return formatTime(timeHours, timeMinutes, timeSeconds)
 }
 
 function distanceInMeters(distance, distanceUnit) {

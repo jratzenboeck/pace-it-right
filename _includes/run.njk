@@ -1,0 +1,110 @@
+<div x-data="run" class="my-4" x-show="selectedSport == 'run'">
+
+    <section x-data="{ runPace: true }">
+        <h2 class="text-xl">Eingabe</h2>
+
+        <div class="my-2">
+            <input type="radio" id="run-pace" name="run-input-choice" value="run-pace" @click="runPace = true"
+                    checked/>
+            <label for="run-pace">Pace (min/km)</label>
+
+            <input type="radio" id="run-distance-time" name="run-input-choice" value="run-distance-time"
+                    @click="runPace = false" class="ml-2"/>
+            <label for="run-distance-time">Distanz / Zeit</label>
+        </div>
+
+        <div class="my-2" x-show="runPace">
+            <input type="number" id="run-input-pace-minutes" step="1" min="0" max="5" class="border w-12" x-model="runPaceMinutes"
+                    @blur="calculateRunTimesByPace"/>
+            <span>min</span>
+            <input type="number" id="run-input-pace-seconds" step="1" min="0" max="59" class="border w-12 ml-4" x-model="runPaceSeconds"
+                    @blur="calculateRunTimesByPace"/>
+            <span>sec</span>
+        </div>
+
+        <div class="my-2" x-show="!runPace">
+            <div>
+                <label for="run-distance-input">Distanz in Meter</label>
+                <input type="number" id="run-distance-input" step="1" min="1" max="20000" class="border w-18 p-1" x-model="runDistanceInputInMeters" @blur="calculateRunTimesByDistanceAndTime"/>
+            </div>
+            <div class="my-2">
+                <label for="run-time-input-minutes">Zeit in Minuten und Sekunden</label>
+                <input type="number" id="run-time-input-minutes" step="1" min="0" max="500" class="border w-12 p-1" x-model="runTimeInputInMinutes" @blur="calculateRunTimesByDistanceAndTime"/>
+                <span>:</span>
+                <input type="number" id="run-time-input-seconds" step="1" min="0" max="59" class="border w-12 p-1" x-model="runTimeInputInSeconds" @blur="calculateRunTimesByDistanceAndTime"/>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="my-4">
+
+        <div x-data="{ sectionVisible: true }" class="my-2">
+            {% resultSectionToggle 'Kurzstrecke' %}
+
+            <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
+                <template x-for="(runTime, index) in runTimesShortTrack" :key="index">
+                    <div class="flex justify-between">
+                        <div>
+                            <span x-text="`${runTime.distance}${runTime.distanceUnit}`"></span>
+                            <span x-show="runTime.distanceLabel" x-text="runTime.distanceLabel"></span>
+                        </div>
+                        <span x-text="runTime.time"></span>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div x-data="{ sectionVisible: false }" class="my-4">
+            {% resultSectionToggle 'Mittelstrecke' %}
+
+            <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
+                <template x-for="(runTime, index) in runTimesMiddleTrack" :key="index">
+                    <div class="flex justify-between">
+                        <div>
+                            <span x-text="`${runTime.distance}${runTime.distanceUnit}`"></span>
+                            <span x-show="runTime.distanceLabel" x-text="runTime.distanceLabel"></span>
+                        </div>
+                        <span x-text="runTime.time"></span>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div x-data="{ sectionVisible: false }" class="my-4">
+            {% resultSectionToggle 'Langstrecke' %}
+
+            <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
+                <template x-for="(runTime, index) in runTimesLongTrack" :key="index">
+                    <div class="flex justify-between">
+                        <div>
+                            <span x-text="`${runTime.distance}${runTime.distanceUnit}`"></span>
+                            <span x-show="runTime.distanceLabel" x-text="runTime.distanceLabel"></span>
+                        </div>
+                        <span x-text="runTime.time"></span>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div x-data="{ sectionVisible: false }" class="my-4">
+            {% resultSectionToggle 'Benutzerdefiniert' %}
+
+            <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
+                <div>
+                    <label for="run-custom-distance-input" class="mr-2">Distanz in Meter</label>
+                    <input type="number" id="run-custom-distance-input" min="1" max="20000" x-model="customRunDistanceInMeters" @blur="calculateRunTimesByPace" class="border w-16 p-1">
+                </div>
+
+                <div class="flex justify-between">
+                    <div>
+                        <span x-text="`${customRunDistanceInMeters}m`"></span>
+                    </div>
+                    <span x-text="customRunTime"></span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</div>

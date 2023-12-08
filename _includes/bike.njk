@@ -1,0 +1,77 @@
+<div x-data="bike" class="my-4" x-show="selectedSport == 'bike'">
+
+    <section x-data="{ bikePace: true }">
+        <h2 class="text-xl">Eingabe</h2>
+
+        <div class="my-2">
+            <input type="radio" id="bike-pace" name="bike-input-choice" value="bike-pace" @click="bikePace = true"
+                    checked/>
+            <label for="bike-pace">Pace (km/h)</label>
+
+            <input type="radio" id="bike-distance-time" name="bike-input-choice" value="bike-distance-time"
+                    @click="bikePace = false" class="ml-2"/>
+            <label for="bike-distance-time">Distanz / Zeit</label>
+        </div>
+
+        <div class="my-2" x-show="bikePace">
+            <input type="number" id="bike-input-pace" step=".1" min="0" max="100" class="border w-12" x-model="bikePaceKmPerHour"
+                    @blur="calculateBikeTimesByPace"/>
+            <span>km/h</span>
+        </div>
+
+        <div class="my-2" x-show="!bikePace">
+            <div>
+                <label for="bike-distance-input">Distanz in Kilometer</label>
+                <input type="number" id="bike-distance-input" step="1" min="1" max="20000" class="border w-18 p-1" x-model="bikeDistanceInputInKm" @blur="calculateBikeTimesByDistanceAndTime"/>
+            </div>
+            <div class="my-2">
+                <label for="bike-time-input-hours">Zeit in Stunden, Minuten und Sekunden</label>
+                <input type="number" id="bike-time-input-hours" step="1" min="0" max="100" class="border w-12 p-1" x-model="bikeTimeInputInHours" @blur="calculateBikeTimesByDistanceAndTime"/>
+                <span>:</span>
+                <input type="number" id="bike-time-input-minutes" step="1" min="0" max="59" class="border w-12 p-1" x-model="bikeTimeInputInMinutes" @blur="calculateBikeTimesByDistanceAndTime"/>
+                <span>:</span>
+                <input type="number" id="bike-time-input-seconds" step="1" min="0" max="59" class="border w-12 p-1" x-model="bikeTimeInputInSeconds" @blur="calculateBikeTimesByDistanceAndTime"/>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="my-4">
+
+        <div x-data="{ sectionVisible: true }" class="my-2">
+            {% resultSectionToggle 'Triathlon' %}
+
+            <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
+                <template x-for="(bikeDistance, index) in bikeTriathlonDistances" :key="index">
+                    <div class="flex justify-between">
+                        <div>
+                            <span x-text="`${bikeDistance.distance}${bikeDistance.distanceUnit}`"></span>
+                            <span x-show="bikeDistance.distanceLabel" x-text="bikeDistance.distanceLabel"></span>
+                        </div>
+                        <span x-text="bikeDistance.time"></span>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div x-data="{ sectionVisible: false }" class="my-4">
+            {% resultSectionToggle 'Benutzerdefiniert' %}
+
+            <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
+                <div>
+                    <label for="bike-custom-distance-input" class="mr-2">Distanz in Kilometer</label>
+                    <input type="number" id="bike-custom-distance-input" step=".1" min="1" max="10000" x-model="customBikeDistanceInKm" @blur="calculateBikeTimesByPace" class="border w-16 p-1">
+                </div>
+
+                <div class="flex justify-between">
+                    <div>
+                        <span x-text="`${customBikeDistanceInKm}km`"></span>
+                    </div>
+                    <span x-text="customBikeTime"></span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</div>
