@@ -1,7 +1,6 @@
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('swim', () => ({
-        // Swim
         swimTimesCommonDistances: [],
         swimTimesTriathlon: [],
         swimPaceMinutes: 0,
@@ -15,6 +14,23 @@ document.addEventListener('alpine:init', () => {
         init() {
             this.prepareSwimTimesForCommonDistances()
             this.prepareSwimTimesForTriathlon()
+        },
+
+        reset() {
+            this.swimTimesCommonDistances.forEach(swimTime => swimTime.time = 0)
+            this.swimTimesTriathlon.forEach(swimTime => swimTime.time = 0)
+            this.swimPaceMinutes = 0
+            this.swimPaceSeconds = 0
+            this.customSwimDistanceInMeters = 0
+            this.customSwimTime = 0
+            this.swimDistanceInputInMeters = 0
+            this.swimTimeInputInMinutes = 0
+            this.swimTimeInputInSeconds = 0
+        },
+
+        changeInputType(isPaceInput) {
+            this.swimPace = isPaceInput
+            this.reset()
         },
 
         prepareSwimTimesForCommonDistances() {
@@ -105,6 +121,21 @@ document.addEventListener('alpine:init', () => {
             this.prepareBikeTimesForTriathlon()
         },
 
+        reset() {
+            this.bikeTriathlonDistances.forEach(bikeTime => bikeTime.time = 0)
+            this.bikePaceKmPerHour = 0
+            this.bikeTimeInputInHours = 0
+            this.bikeTimeInputInMinutes = 0
+            this.bikeDistanceInputInKm = 0
+            this.customBikeDistanceInKm = 0
+            this.customBikeTime = 0
+        },
+
+        changeInputType(isPaceInput) {
+            this.bikePace = isPaceInput
+            this.reset()
+        },
+
         prepareBikeTimesForTriathlon() {
             this.bikeTriathlonDistances.push(
             {
@@ -172,6 +203,24 @@ document.addEventListener('alpine:init', () => {
             this.prepareRunTimesForShortCourse()
             this.prepareRunTimesForMiddleTrack()
             this.prepareRunTimesForLongTrack()
+        },
+
+        changeInputType(isPaceInput) {
+            this.runPace = isPaceInput
+            this.reset()
+        },
+
+        reset() {
+            this.runTimesShortTrack.forEach(runTime => runTime.time = 0)
+            this.runTimesMiddleTrack.forEach(runTime => runTime.time = 0)
+            this.runTimesLongTrack.forEach(runTime => runTime.time = 0)
+            this.runPaceMinutes = 0
+            this.runPaceSeconds = 0
+            this.customRunDistanceInMeters = 0
+            this.customRunTime = 0
+            this.runDistanceInputInMeters = 0
+            this.runTimeInputInMinutes = 0
+            this.runTimeInputInSeconds = 0
         },
 
         prepareRunTimesForShortCourse() {

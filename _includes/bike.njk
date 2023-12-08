@@ -4,12 +4,12 @@
         <h2 class="text-xl">Eingabe</h2>
 
         <div class="my-2">
-            <input type="radio" id="bike-pace" name="bike-input-choice" value="bike-pace" @click="bikePace = true"
+            <input type="radio" id="bike-pace" name="bike-input-choice" value="bike-pace" @click="changeInputType(true)"
                     checked/>
             <label for="bike-pace">Pace (km/h)</label>
 
             <input type="radio" id="bike-distance-time" name="bike-input-choice" value="bike-distance-time"
-                    @click="bikePace = false" class="ml-2"/>
+                    @click="changeInputType(false)" class="ml-2"/>
             <label for="bike-distance-time">Distanz / Zeit</label>
         </div>
 
