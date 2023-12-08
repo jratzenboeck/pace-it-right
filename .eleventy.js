@@ -1,5 +1,6 @@
 module.exports = function (eleventyConfig) {
-	eleventyConfig.addPassthroughCopy("index.js");
+    eleventyConfig.addPassthroughCopy("index.css")
+	eleventyConfig.addPassthroughCopy("index.js")
 
 	eleventyConfig.addNunjucksShortcode('resultSectionToggle', function (title) {
 		return `<div class="flex justify-between items-center border p-2 hover:cursor-pointer" @click="sectionVisible = !sectionVisible">
@@ -12,4 +13,4 @@ module.exports = function (eleventyConfig) {
                 </svg>
             </div>`
 	})
-};
+}
