@@ -1,6 +1,7 @@
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('swim', () => ({
+        // Swim
         swimTimesCommonDistances: [],
         swimTimesTriathlon: [],
         swimPaceMinutes: 0,
@@ -17,14 +18,7 @@ document.addEventListener('alpine:init', () => {
         },
 
         prepareSwimTimesForCommonDistances() {
-            for (let distance = 25; distance <= 800; distance *= 2) {
-                this.swimTimesCommonDistances.push({
-                    distance,
-                    distanceUnit: 'm',
-                    time: 0
-                })
-            }
-
+            this.swimTimesCommonDistances = prepareDistances(25, 800)
             this.swimTimesCommonDistances.push(
                 {
                     distance: 1500,
@@ -72,33 +66,164 @@ document.addEventListener('alpine:init', () => {
             const seconds = minutesInput * 60 + secondsInput
 
             this.swimTimesCommonDistances.forEach(swimTime => {
-                swimTime.time = calculateSwimTime(seconds, swimTime.distance, swimTime.distanceUnit)
+                swimTime.time = calculateTime(seconds, swimTime.distance, swimTime.distanceUnit, 100)
             });
             this.swimTimesTriathlon.forEach(swimTime => {
-                swimTime.time = calculateSwimTime(seconds, swimTime.distance, swimTime.distanceUnit)
+                swimTime.time = calculateTime(seconds, swimTime.distance, swimTime.distanceUnit, 100)
             });
-            this.customSwimTime = calculateSwimTime(seconds, this.customSwimDistanceInMeters, 'm')
+            this.customSwimTime = calculateTime(seconds, this.customSwimDistanceInMeters, 'm', 100)
         },
 
         calculateSwimTimesByDistanceAndTime() {
             const minutesInput = parseInt(this.swimTimeInputInMinutes)
             const secondsInput = parseInt(this.swimTimeInputInSeconds)
             const seconds = minutesInput * 60 + secondsInput
-            const pacePer100InSeconds = (100 / parseInt(this.swimDistanceInputInMeters)) * seconds
+            const paceRatio = 100
+            const pacePer100InSeconds = (paceRatio / parseInt(this.swimDistanceInputInMeters)) * seconds
 
             this.swimTimesCommonDistances.forEach(swimTime => {
-                swimTime.time = calculateSwimTime(pacePer100InSeconds, swimTime.distance, swimTime.distanceUnit)
+                swimTime.time = calculateTime(pacePer100InSeconds, swimTime.distance, swimTime.distanceUnit, paceRatio)
             });
             this.swimTimesTriathlon.forEach(swimTime => {
-                swimTime.time = calculateSwimTime(pacePer100InSeconds, swimTime.distance, swimTime.distanceUnit)
+                swimTime.time = calculateTime(pacePer100InSeconds, swimTime.distance, swimTime.distanceUnit, paceRatio)
             });
-            this.customSwimTime = calculateSwimTime(pacePer100InSeconds, this.customSwimDistanceInMeters, 'm')
+            this.customSwimTime = calculateTime(pacePer100InSeconds, this.customSwimDistanceInMeters, 'm', paceRatio)
         }
+    })),
+
+    Alpine.data('run', () => ({
+        runTimesShortTrack: [],
+        runTimesMiddleTrack: [],
+        runTimesLongTrack: [],
+        runPaceMinutes: 0,
+        runPaceSeconds: 0,
+        customRunDistanceInMeters: 0,
+        customRunTime: 0,
+        runDistanceInputInMeters: 0,
+        runTimeInputInMinutes: 0,
+        runTimeInputInSeconds: 0,
+
+        init() {
+            this.prepareRunTimesForShortCourse()
+            this.prepareRunTimesForMiddleTrack()
+            this.prepareRunTimesForLongTrack()
+        },
+
+        prepareRunTimesForShortCourse() {
+            this.runTimesShortTrack = prepareDistances(100, 400, 2)
+        },
+
+        prepareRunTimesForMiddleTrack() {
+            this.runTimesMiddleTrack.push(
+                {
+                    distance: 800,
+                    distanceUnit: 'm',
+                    time: 0
+                },
+                {
+                    distance: 1200,
+                    distanceUnit: 'm',
+                    time: 0
+                },
+                {
+                    distance: 1600,
+                    distanceUnit: 'm',
+                    time: 0
+                })
+        },
+
+        prepareRunTimesForLongTrack() {
+            this.runTimesLongTrack.push(
+                {
+                    distance: 2000,
+                    distanceUnit: 'm',
+                    time: 0
+                },
+                {
+                    distance: 3000,
+                    distanceUnit: 'm',
+                    time: 0
+                },
+                {
+                    distance: 5000,
+                    distanceUnit: 'm',
+                    time: 0
+                },
+                {
+                    distance: 10,
+                    distanceUnit: 'km',
+                    time: 0
+                },
+                {
+                    distance: 21.1,
+                    distanceUnit: 'km',
+                    distanceLabel: '(Halbmarathon)',
+                    time: 0
+                },
+                {
+                    distance: 42.195,
+                    distanceUnit: 'km',
+                    distanceLabel: '(Marathon)',
+                    time: 0
+                })
+        },
+
+        calculateRunTimesByPace() {
+            const minutesInput = parseInt(this.runPaceMinutes)
+            const secondsInput = parseInt(this.runPaceSeconds)
+            const seconds = minutesInput * 60 + secondsInput
+            const ratio = 1000
+
+            this.runTimesShortTrack.forEach(runTime => {
+                runTime.time = calculateTime(seconds, runTime.distance, runTime.distanceUnit, ratio)
+            });
+            this.runTimesMiddleTrack.forEach(runTime => {
+                runTime.time = calculateTime(seconds, runTime.distance, runTime.distanceUnit, ratio)
+            });
+            this.runTimesLongTrack.forEach(runTime => {
+                runTime.time = calculateTime(seconds, runTime.distance, runTime.distanceUnit, ratio)
+            });
+            this.customRunTime = calculateTime(seconds, this.customRunDistanceInMeters, 'm', ratio)
+        },
+
+        calculateRunTimesByDistanceAndTime() {
+            const minutesInput = parseInt(this.runTimeInputInMinutes)
+            const secondsInput = parseInt(this.runTimeInputInSeconds)
+            const seconds = minutesInput * 60 + secondsInput
+            const ratio = 1000
+            const pacePerKmInSeconds = (ratio / parseInt(this.runDistanceInputInMeters)) * seconds
+
+            this.runTimesShortTrack.forEach(runTime => {
+                runTime.time = calculateTime(pacePerKmInSeconds, runTime.distance, runTime.distanceUnit, ratio)
+            });
+            this.runTimesMiddleTrack.forEach(runTime => {
+                runTime.time = calculateTime(pacePerKmInSeconds, runTime.distance, runTime.distanceUnit, ratio)
+            });
+            this.customRunTime = calculateTime(pacePerKmInSeconds, this.customRunDistanceInMeters, 'm', ratio)
+        }
+    }))
+
+    Alpine.data('bike', () => ({
+
     }))
 })
 
-function calculateSwimTime(secondsInput, distance, distanceUnit) {
-    const resultInSeconds = secondsInput / 100 * distanceInMeters(distance, distanceUnit)
+function prepareDistances(start, end, factor = 2, meters = 'm') {
+    const distances = []
+
+    for (let distance = start; distance <= end; distance *= factor) {
+        distances.push({
+            distance,
+            distanceUnit: meters,
+            time: 0
+        })
+    }
+
+    return distances
+}
+
+function calculateTime(secondsInput, distance, distanceUnit, paceRatio) {
+    const resultInSeconds = secondsInput / paceRatio * distanceInMeters(distance, distanceUnit)
 
     const swimTimeHours = Math.floor(resultInSeconds / 3600)
     const swimTimeMinutes = Math.floor(resultInSeconds % 3600 / 60)
