@@ -1,19 +1,23 @@
 <div x-data="run" class="my-4" x-show="selectedSport == 'run'">
 
-    <section x-data="{ runPace: true }">
+    <section x-data="{ metric: 'pace' }">
         <h2 class="text-xl">Eingabe</h2>
 
         <div class="my-2">
-            <input type="radio" id="run-pace" name="run-input-choice" value="run-pace" @click="changeInputType(true)"
+            <input type="radio" id="run-pace" name="run-input-choice" value="run-pace" @click="changeInputType('pace')"
                     checked/>
             <label for="run-pace">Pace (min/km)</label>
 
             <input type="radio" id="run-distance-time" name="run-input-choice" value="run-distance-time"
-                    @click="changeInputType(false)" class="ml-2"/>
+                    @click="changeInputType('distance')" class="ml-2"/>
             <label for="run-distance-time">Distanz / Zeit</label>
+
+            <input type="radio" id="run-velocity" name="run-input-choice" value="run-velocity"
+                    @click="changeInputType('velocity')" class="ml-2"/>
+            <label for="run-velocity">Geschwindigkeit</label>
         </div>
 
-        <div class="my-2" x-show="runPace">
+        <div class="my-2" x-show="metric == 'pace'">
             <input type="number" id="run-input-pace-minutes" step="1" min="0" max="5" class="border w-12" x-model="runPaceMinutes"
                     @blur="calculateRunTimesByPace"/>
             <span>min</span>
@@ -22,7 +26,7 @@
             <span>sec</span>
         </div>
 
-        <div class="my-2" x-show="!runPace">
+        <div class="my-2" x-show="metric == 'distance'">
             <div>
                 <label for="run-distance-input">Distanz in Meter</label>
                 <input type="number" id="run-distance-input" step="1" min="1" max="20000" class="border w-18 p-1" x-model="runDistanceInputInMeters" @blur="calculateRunTimesByDistanceAndTime"/>
@@ -32,6 +36,13 @@
                 <input type="number" id="run-time-input-minutes" step="1" min="0" max="500" class="border w-12 p-1" x-model="runTimeInputInMinutes" @blur="calculateRunTimesByDistanceAndTime"/>
                 <span>:</span>
                 <input type="number" id="run-time-input-seconds" step="1" min="0" max="59" class="border w-12 p-1" x-model="runTimeInputInSeconds" @blur="calculateRunTimesByDistanceAndTime"/>
+            </div>
+        </div>
+
+        <div class="my-2" x-show="metric == 'velocity'">
+            <div class="my-2">
+                <label for="run-velocity-input-kmh">Geschwindigkeit in km/h</label>
+                <input type="number" id="run-velocity-input-kmh" step=".1" min="0" max="30" class="border w-12 p-1" x-model="runVelocityInputInKmh" @blur="calculateRunTimesByVelocity"/>
             </div>
         </div>
 
