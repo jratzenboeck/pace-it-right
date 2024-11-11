@@ -231,6 +231,7 @@ document.addEventListener("alpine:init", () => {
       },
     })),
     Alpine.data("run", () => ({
+      metric: "pace",
       runTimesShortTrack: [],
       runTimesMiddleTrack: [],
       runTimesLongTrack: [],
@@ -326,6 +327,20 @@ document.addEventListener("alpine:init", () => {
             time: 0,
           }
         );
+      },
+
+      calculateRunTimes(metric) {
+        switch (metric) {
+          case "pace":
+            this.calculateRunTimesByPace();
+            break;
+          case "distance":
+            this.calculateRunTimesByDistanceAndTime();
+            break;
+          case "velocity":
+            this.calculateRunTimesByVelocity();
+            break;
+        }
       },
 
       calculateRunTimesByPace() {

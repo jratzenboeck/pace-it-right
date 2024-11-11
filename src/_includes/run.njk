@@ -1,6 +1,6 @@
 <div x-data="run" class="my-4" x-show="selectedSport == 'run'">
 
-    <section x-data="{ metric: 'pace' }">
+    <section>
         <h2 class="text-xl">Eingabe</h2>
 
         <div class="my-2">
@@ -136,7 +136,7 @@
             <div x-show="sectionVisible" x-transition.opacity.duration.500ms class="my-2">
                 <div>
                     <label for="run-custom-distance-input" class="mr-2">Distanz in Meter</label>
-                    <input type="number" id="run-custom-distance-input" min="1" max="20000" x-model="customRunDistanceInMeters" @blur="calculateRunTimesByPace" class="border w-16 p-1">
+                    <input type="number" id="run-custom-distance-input" min="1" max="20000" x-model="customRunDistanceInMeters" @blur="calculateRunTimes(metric)" class="border w-16 p-1">
                 </div>
 
                 <div class="flex justify-between">
